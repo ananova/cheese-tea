@@ -10,14 +10,16 @@ import React, {Component} from 'react';
 import {
   Button,
   CameraRoll,
+  Image,
   ImagePickerIOS,
   StyleSheet,
+  Text,
   View
 } from 'react-native';
 
 type Props = {};
 export default class App extends Component<Props> {
-  state = { photos: [] }
+  state = { photos: [], image: null }
   
   _handleButtonPress = () => {
     CameraRoll.getPhotos({
@@ -34,14 +36,18 @@ export default class App extends Component<Props> {
 
   pickImage = () => {
     // openSelectDialog(config, successCallback, errorCallback);
-    ImagePickerIOS.openSelectDialog({}, imageUri => {
-      this.setState({ image: imageUri });
-    }, error => console.error(error));
-  }
+    ImagePickerIOS.openSelectDialog(
+      {},
+      (imageUri) => { this.setState({ image: imageUri }); },
+      (error)    => { console.error(error); }
+    );
+  };
 
   render() {
     return (
       <View style={styles.container}>
+        { this.state.image ? <Image style={{height: 100, width: 100}} source={{uri: this.state.image}} /> : null }
+        {/* { this.state.image ? <Text>{this.state.image}</Text> : null } */}
         <Button title="Load Images with ImagePickerIOS" onPress={this.pickImage} />
         <Button title="Load Images with CameraRoll" onPress={this._handleButtonPress} />
       </View>
