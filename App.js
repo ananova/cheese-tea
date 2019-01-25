@@ -43,7 +43,7 @@ export default class App extends Component<Props> {
     return (
       <View style={styles.container}>
         <Button title="Load Images with ImagePickerIOS" onPress={this.pickImage} />
-        <Button title="Load Images with CameraRoll" onPress={this.pickImage} />
+        <Button title="Load Images with CameraRoll" onPress={this._handleButtonPress} />
       </View>
     );
   }
