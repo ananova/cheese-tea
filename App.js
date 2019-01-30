@@ -1,45 +1,45 @@
 import React, { Component } from 'react'
 import {
   Button,
-  CameraRoll,
   Image,
-  ImagePickerIOS,
   StyleSheet,
   View
 } from 'react-native'
+import ImagePicker from './ImagePicker'
 
 export default class App extends Component {
-  state = { photos: [], image: null }
+  state = { image: null, displayPicker: false }
 
   _handleButtonPress = () => {
-    CameraRoll.getPhotos({
-      first: 20,
-      assetType: 'Photos'
-    })
-      .then(r => {
-        this.setState({ photos: r.edges })
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  };
+    this.setState({ displayPicker: true })
+  }
 
-  pickImage = () => {
-    // openSelectDialog(config, successCallback, errorCallback);
-    ImagePickerIOS.openSelectDialog(
-      {},
-      (imageUri) => { this.setState({ image: imageUri }) },
-      (error) => { console.error(error) }
-    )
-  };
+  onImageSelect = (photo) => {
+    this.setState({ image: photo.node.image, displayPicker: false })
+  }
+
+  onCancel = () => {
+    this.setState({ displayPicker: false })
+  }
 
   render () {
-    return (
+    return this.state.displayPicker ? (
+      <ImagePicker
+        onImageSelect={this.onImageSelect}
+        onCancel={this.onCancel}
+      />
+    ) : (
       <View style={styles.container}>
-        { this.state.image ? <Image style={{ height: 100, width: 100 }} source={{ uri: this.state.image }} /> : null }
-        {/* { this.state.image ? <Text>{this.state.image}</Text> : null } */}
-        <Button title='Load Images with ImagePickerIOS' onPress={this.pickImage} />
-        <Button title='Load Images with CameraRoll' onPress={this._handleButtonPress} />
+        {
+          this.state.image ? (
+            <Image
+              style={{ width: 100, height: 100 }}
+              source={{ uri: this.state.image.uri }}
+            />
+          ) : null
+        }
+
+        <Button title='Select Image' onPress={this._handleButtonPress} />
       </View>
     )
   }
