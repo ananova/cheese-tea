@@ -5,17 +5,17 @@ import {
   StyleSheet,
   View
 } from 'react-native'
-import ImagePicker from './ImagePicker'
+import MediaPicker from './MediaPicker'
 
 export default class App extends Component {
-  state = { image: null, displayPicker: false }
+  state = { media: null, displayPicker: false }
 
   _handleButtonPress = () => {
     this.setState({ displayPicker: true })
   }
 
-  onImageSelect = (photo) => {
-    this.setState({ image: photo.node.image, displayPicker: false })
+  onMediaSelect = (item) => {
+    this.setState({ media: item.node.image, displayPicker: false })
   }
 
   onCancel = () => {
@@ -24,22 +24,23 @@ export default class App extends Component {
 
   render () {
     return this.state.displayPicker ? (
-      <ImagePicker
-        onImageSelect={this.onImageSelect}
+      <MediaPicker
+        onMediaSelect={this.onMediaSelect}
         onCancel={this.onCancel}
+        assetType='Videos'
       />
     ) : (
       <View style={styles.container}>
         {
-          this.state.image ? (
+          this.state.media ? (
             <Image
               style={{ width: 100, height: 100 }}
-              source={{ uri: this.state.image.uri }}
+              source={{ uri: this.state.media.uri }}
             />
           ) : null
         }
 
-        <Button title='Select Image' onPress={this._handleButtonPress} />
+        <Button title='Select Video' onPress={this._handleButtonPress} />
       </View>
     )
   }
