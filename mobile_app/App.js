@@ -10,8 +10,32 @@ import MediaPicker from './MediaPicker'
 export default class App extends Component {
   state = { media: null, displayPicker: false }
 
-  _handleButtonPress = () => {
+  _handleSelectButtonPress = () => {
     this.setState({ displayPicker: true })
+  }
+
+  _handleUploadButtonPress = () => {
+    const { media } = this.state
+    const formData = new FormData()
+
+    formData.append('video', {
+      name: media.filename,
+      uri: media.uri,
+      type: 'video/mp4'
+    })
+
+    const options = {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+
+    fetch('http://localhost:5000/api/upload.json', options)
+      .then(response => console.log(response))
+      .catch(error => console.error(error))
   }
 
   onMediaSelect = (item) => {
@@ -40,7 +64,10 @@ export default class App extends Component {
           ) : null
         }
 
-        <Button title='Select Video' onPress={this._handleButtonPress} />
+        <Button title='Select Video' onPress={this._handleSelectButtonPress} />
+        {this.state.media ? (
+          <Button title='Upload Video' onPress={this._handleUploadButtonPress} />
+        ) : null}
       </View>
     )
   }
