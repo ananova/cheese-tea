@@ -7,6 +7,7 @@ When it is more polished, I will add more instructions here!
 
 ## Development
 ```
+cp .env.example .env
 # Start Rails server and Metro bundler
 bundle exec foreman start
 # Build mobile app and run in iOS simulator
