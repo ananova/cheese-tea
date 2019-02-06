@@ -1,0 +1,2 @@
+web: aws-vault exec $AWS_ROLE -- bundle exec rails server
+mobile: sh -c 'cd mobile_app && yarn start'

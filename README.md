@@ -9,7 +9,7 @@ When it is more polished, I will add more instructions here!
 ```
 cp .env.example .env
 # Start Rails server and Metro bundler
-bundle exec foreman start
+bundle exec foreman start --procfile Procfile.dev
 # Build mobile app and run in iOS simulator
 cd mobile_app && yarn run ios
 ```
