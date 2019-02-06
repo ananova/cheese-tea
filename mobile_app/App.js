@@ -15,12 +15,10 @@ export default class App extends Component {
   }
 
   _handleUploadButtonPress = () => {
-    const { media } = this.state
-
     const options = {
       method: 'POST',
       body: JSON.stringify({
-        name: media.filename,
+        name: this.state.media.filename,
       }),
       headers: {
         Accept: 'application/json',
@@ -30,7 +28,7 @@ export default class App extends Component {
 
     fetch('http://localhost:5000/api/upload.json', options)
       .then(response => response.json())
-      .then(json => console.log(json))
+      .then(json => this.uploadToS3(json.presigned_url))
       .catch(error => console.error(error))
   }
 
@@ -40,6 +38,30 @@ export default class App extends Component {
 
   onCancel = () => {
     this.setState({ displayPicker: false })
+  }
+
+  uploadToS3 = (presignedUrl) => {
+    const { media } = this.state
+    const formData = new FormData()
+
+    formData.append('body', {
+      name: media.filename,
+      uri: media.uri,
+      type: 'video/mp4',
+    })
+
+    const options = {
+      method: 'PUT',
+      body: formData,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+
+    fetch(presignedUrl, options)
+      .then(response => console.log(response))
+      .catch(error => console.error(error))
   }
 
   render () {
