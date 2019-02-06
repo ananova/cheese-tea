@@ -16,25 +16,21 @@ export default class App extends Component {
 
   _handleUploadButtonPress = () => {
     const { media } = this.state
-    const formData = new FormData()
-
-    formData.append('video', {
-      name: media.filename,
-      uri: media.uri,
-      type: 'video/mp4'
-    })
 
     const options = {
       method: 'POST',
-      body: formData,
+      body: JSON.stringify({
+        name: media.filename,
+      }),
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "application/json",
       },
     }
 
     fetch('http://localhost:5000/api/upload.json', options)
-      .then(response => console.log(response))
+      .then(response => response.json())
+      .then(json => console.log(json))
       .catch(error => console.error(error))
   }
 
